@@ -1,0 +1,8 @@
+{
+  "name": "nn-cookbook",
+  "description": "Composable PyTorch training recipes for Claude Code. Generate complete training projects from modular ingredients — no framework, no Trainer class, just plain PyTorch + Hydra.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Valentino Maiorca"
+  }
+}

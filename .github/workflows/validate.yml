@@ -1,0 +1,68 @@
+name: Validate plugin
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate plugin.json
+        run: |
+          python3 -c "
+          import json, sys
+          with open('.claude-plugin/plugin.json') as f:
+              manifest = json.load(f)
+          required = ['name', 'version', 'description']
+          missing = [k for k in required if k not in manifest]
+          if missing:
+              print(f'Missing required fields: {missing}')
+              sys.exit(1)
+          print(f'Plugin: {manifest[\"name\"]} v{manifest[\"version\"]}')
+          "
+
+      - name: Validate SKILL.md frontmatter
+        run: |
+          python3 -c "
+          import sys
+          with open('commands/training/SKILL.md') as f:
+              content = f.read()
+          if not content.startswith('---'):
+              print('SKILL.md missing YAML frontmatter')
+              sys.exit(1)
+          end = content.index('---', 3)
+          frontmatter = content[3:end]
+          if 'description:' not in frontmatter:
+              print('SKILL.md frontmatter missing description')
+              sys.exit(1)
+          print('SKILL.md frontmatter OK')
+          "
+
+      - name: Validate ingredient frontmatter
+        run: |
+          python3 -c "
+          import glob, sys
+          errors = []
+          for path in sorted(glob.glob('ingredients/*.py')):
+              with open(path) as f:
+                  content = f.read()
+              if '---' not in content:
+                  errors.append(f'{path}: missing YAML frontmatter')
+                  continue
+              required = ['name:', 'slug:', 'description:', 'touches:']
+              for field in required:
+                  if field not in content.split('---')[1]:
+                      errors.append(f'{path}: missing {field.rstrip(\":\")}')
+          if errors:
+              print('\n'.join(errors))
+              sys.exit(1)
+          print(f'All {len(glob.glob(\"ingredients/*.py\"))} ingredients valid')
+          "
+
+      - name: Lint with ruff
+        run: pip install ruff && ruff check ingredients/

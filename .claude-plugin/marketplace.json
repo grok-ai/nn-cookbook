@@ -1,0 +1,17 @@
+{
+  "name": "nn-cookbook",
+  "owner": {
+    "name": "Grok AI"
+  },
+  "plugins": [
+    {
+      "name": "nn-cookbook",
+      "source": {
+        "source": "github",
+        "repo": "grok-ai/nn-cookbook"
+      },
+      "description": "Composable PyTorch training recipes for Claude Code.",
+      "version": "0.1.0"
+    }
+  ]
+}
