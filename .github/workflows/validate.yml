@@ -48,7 +48,7 @@ jobs:
           python3 -c "
           import glob, sys
           errors = []
-          for path in sorted(glob.glob('ingredients/*.py')):
+          for path in sorted(glob.glob('commands/training/ingredients/*.py')):
               with open(path) as f:
                   content = f.read()
               if '---' not in content:
@@ -61,8 +61,8 @@ jobs:
           if errors:
               print('\n'.join(errors))
               sys.exit(1)
-          print(f'All {len(glob.glob(\"ingredients/*.py\"))} ingredients valid')
+          print(f'All {len(glob.glob(\"commands/training/ingredients/*.py\"))} ingredients valid')
           "
 
       - name: Lint with ruff
-        run: pip install ruff && ruff check ingredients/
+        run: pip install ruff && ruff check commands/training/ingredients/

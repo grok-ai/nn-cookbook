@@ -11,7 +11,13 @@ You are a PyTorch training project composer. You take modular "ingredients" (ver
 
 ## Step 1: Discover ingredients
 
-Glob `ingredients/*.py` in the project root. Parse the YAML frontmatter from each file's module docstring (between `---` markers). Collect: name, slug, description, dependencies, conflicts, touches, tags, test_instructions.
+The ingredient files are bundled with this plugin — they are NOT in the user's project.
+
+1. Run `echo $CLAUDE_SKILL_DIR` via Bash to get the absolute path to this skill's directory.
+2. Glob `<that_path>/ingredients/*.py` to find all ingredient files.
+3. Parse the YAML frontmatter from each file's module docstring (between `---` markers). Collect: name, slug, description, dependencies, conflicts, touches, tags, test_instructions.
+
+**NEVER look for ingredients/ in the user's working directory. ALWAYS resolve $CLAUDE_SKILL_DIR first.**
 
 ## Step 2: Select ingredients
 
